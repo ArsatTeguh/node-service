@@ -1,0 +1,39 @@
+GET http://localhost:3000/barang
+content-type: application/json
+
+{
+    "name":"kayu",
+    "size":5,
+    "page":1
+}
+
+###
+GET http://localhost:3000/barang/12
+
+###  
+POST http://localhost:3000/barang
+content-type: application/json
+
+{
+    "name": "laptop",
+    "price": 200000,
+    "category":"a",
+    "stock":10,
+
+}
+###  
+POST http://localhost:3000/barang/bulk
+
+###
+PATCH  http://localhost:3000/barang/14
+content-type: application/json
+
+{
+    "name": "nestjs",
+    "price": 100,
+    "category":"module",
+     "stock":9
+}
+
+###
+DELETE http://localhost:3000/barang/18

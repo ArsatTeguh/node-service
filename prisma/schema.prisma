@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Barang {
+  id        Int         @id @default(autoincrement())
+  thumbnail String?     @db.VarChar(100)
+  name      String      @db.VarChar(50)
+  price     Int         @db.Int
+  variants  Json?       @db.Json
+  transaksi Transaksi[] // 1 BARANG BISA MEMILIKI BANYAK TRANSAKSI
+  category  String      @db.VarChar(50)
+  stock     Int         @db.Int
+
+  @@map("barang")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  @@map("category")
+}
+
+model Transaksi {
+  id        Int    @id @default(autoincrement())
+  name      String @db.VarChar(50)
+  count     Int
+  id_barang Int
+  barang    Barang @relation(fields: [id_barang], references: [id]) // 1 TRANSAKSI KE 1 BARANG . INI TIDAK AKAN MENAMPILKAN FIELD BARANG
+
+  @@map("transaksi")
+}
