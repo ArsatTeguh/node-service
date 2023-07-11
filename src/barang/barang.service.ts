@@ -6,11 +6,7 @@ import { BarangDto } from './dto/create-barang.dto';
 
 @Injectable()
 export class BarangService {
-  constructor(private prisma: PrismaService) { }
-
-  async bulkAddBarang(filePath: Array<string>) {
-    return filePath
-  }
+  constructor(private prisma: PrismaService) {}
 
   async add(barang: BarangDto) {
     const categoryExist = await this.prisma.category.findFirst({
@@ -30,7 +26,6 @@ export class BarangService {
     return await this.prisma.barang.create({
       data: barang,
     });
-
   }
 
   async findOne(id: number) {
@@ -39,7 +34,6 @@ export class BarangService {
         id: id,
       },
     });
-
   }
 
   async update(id: number, barang: BarangDto) {
@@ -58,7 +52,6 @@ export class BarangService {
           name: barang.category,
         },
       });
-
     } else {
       await this.prisma.category.create({
         data: {
@@ -75,8 +68,7 @@ export class BarangService {
   }
 
   async remove(id: number) {
-    const barangExist = await this.prisma.barang.findMany()
-
+    const barangExist = await this.prisma.barang.findMany();
 
     const barang = await this.prisma.barang.delete({
       where: {
@@ -84,15 +76,17 @@ export class BarangService {
       },
     });
 
-    const currentCategory = barangExist.filter(e => e.category === barang.category)
+    const currentCategory = barangExist.filter(
+      (e) => e.category === barang.category,
+    );
     if (currentCategory.length <= 1) {
       await this.prisma.category.deleteMany({
         where: {
-          name: barang.category
-        }
-      })
+          name: barang.category,
+        },
+      });
     }
-    return barang
+    return barang;
   }
 
   async search(selection: SearchAndPagination) {
@@ -101,68 +95,80 @@ export class BarangService {
       price: selection.price,
       id_category: selection.category ?? [],
       size: selection.size ?? 5,
-      page: selection.page ?? 1
-    }
+      page: selection.page ?? 1,
+    };
 
-    const skip = (intialFilters.page - 1) * intialFilters.size
-    const filters = []
+    const skip = (intialFilters.page - 1) * intialFilters.size;
+    const filters = [];
     if (intialFilters.name) {
       filters.push({
         name: {
-          contains: intialFilters.name
-        }
-      })
+          contains: intialFilters.name,
+        },
+      });
     }
     if (intialFilters.price) {
-      filters.push({ price: intialFilters.price })
+      filters.push({ price: intialFilters.price });
     }
     if (intialFilters.id_category.length !== 0) {
       filters.push({
         id_category: {
-          in: intialFilters.id_category
-        }
-      })
+          in: intialFilters.id_category,
+        },
+      });
     }
     const searchCriteria = {
       where: {
         AND: filters,
       },
       take: intialFilters.size,
-      skip: skip
+      skip: skip,
     };
 
-    const resultFilters = await this.prisma.barang.findMany(searchCriteria)
-    const totalItem = await this.prisma.barang.count(searchCriteria)
+    const resultFilters = await this.prisma.barang.findMany(searchCriteria);
+    const totalItem = await this.prisma.barang.count(searchCriteria);
     return {
       data: resultFilters,
       pagging: {
         page: intialFilters.page,
         total_item: totalItem,
-        total_page: Math.floor(totalItem / intialFilters.size)
-      }
-    }
+        total_page: Math.floor(totalItem / intialFilters.size),
+      },
+    };
   }
 
   async findAll(selection: SearchAndPagination) {
-    const search = await this.search(selection)
-    return search
+    const search = await this.search(selection);
+    return search;
   }
 
   async parseExcelToJson(jsonData: any) {
-    const category = await this.prisma.category.findMany()
-    const itemNameCategory = category.map(e => e.name)
-    const categoryNoExist = jsonData.filter((item: BarangDto) => !itemNameCategory.includes(item.category));
-    const compare = compareDataById(categoryNoExist)
+    const category = await this.prisma.category.findMany();
+    const itemNameCategory = category.map((e) => e.name);
+    const categoryNoExist = jsonData.filter(
+      (item: BarangDto) => !itemNameCategory.includes(item.category),
+    );
+    const compare = compareDataById(categoryNoExist);
     compare.forEach(async (item) => {
       await this.prisma.category.create({
         data: {
-          name: item.category
-        }
-      })
-    })
+          name: item.category,
+        },
+      });
+    });
     await this.prisma.barang.createMany({
-      data: jsonData
-    })
-    return jsonData
+      data: jsonData,
+    });
+    return jsonData;
+  }
+
+  async deleteBulk(barangId: Array<number>) {
+    return await this.prisma.barang.deleteMany({
+      where: {
+        id: {
+          in: barangId,
+        },
+      },
+    });
   }
 }

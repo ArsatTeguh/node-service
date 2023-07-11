@@ -10,6 +10,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       Int     @id @default(autoincrement())
+  username String  @db.VarChar(100)
+  email    String  @db.VarChar(20)
+  password String  @db.VarChar(100)
+  image    String? @db.VarChar(100)
+
+  @@map("user")
+}
+
 model Barang {
   id        Int         @id @default(autoincrement())
   thumbnail String?     @db.VarChar(100)

@@ -37,3 +37,11 @@ content-type: application/json
 
 ###
 DELETE http://localhost:3000/barang/18
+
+###
+POST  http://localhost:3000/barang/bulk/delete
+content-type: application/json
+
+{
+    "bulkId":[55,56,57,58,59,60]
+}

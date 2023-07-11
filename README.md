@@ -41,7 +41,7 @@ Have some fitur tables :
 <input type="checkbox" checked>
 <label for="vehicle1"> [Bulk] Create products via excel</label><br>
 
-<input type="checkbox" >
+<input type="checkbox" checked >
 <label for="vehicle1"> [Bulk] Put products</label><br>
 
 <input type="checkbox" checked>
