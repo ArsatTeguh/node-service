@@ -11,11 +11,14 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  username String  @db.VarChar(100)
-  email    String  @db.VarChar(20)
-  password String  @db.VarChar(100)
-  image    String? @db.VarChar(100)
+  id            Int      @id @default(autoincrement())
+  username      String   @db.VarChar(100)
+  email         String   @db.VarChar(20)
+  password      String   @db.VarChar(100)
+  image         String?  @db.VarChar(100)
+  refresh_token String?  @db.VarChar(100)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@map("user")
 }
@@ -29,23 +32,29 @@ model Barang {
   transaksi Transaksi[] // 1 BARANG BISA MEMILIKI BANYAK TRANSAKSI
   category  String      @db.VarChar(50)
   stock     Int         @db.Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
   @@map("barang")
 }
 
 model Category {
-  id   Int    @id @default(autoincrement())
-  name String
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("category")
 }
 
 model Transaksi {
-  id        Int    @id @default(autoincrement())
-  name      String @db.VarChar(50)
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(50)
   count     Int
   id_barang Int
-  barang    Barang @relation(fields: [id_barang], references: [id]) // 1 TRANSAKSI KE 1 BARANG . INI TIDAK AKAN MENAMPILKAN FIELD BARANG
+  barang    Barang   @relation(fields: [id_barang], references: [id]) // 1 TRANSAKSI KE 1 BARANG . INI TIDAK AKAN MENAMPILKAN FIELD BARANG
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("transaksi")
 }

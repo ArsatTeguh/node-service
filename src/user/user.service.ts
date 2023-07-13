@@ -1,26 +1,95 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt/dist';
+import * as argon from 'argon2';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Itoken } from './dto/tokenType';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private prisma: PrismaService, private jwtService: JwtService, private config: ConfigService) { }
+
+  async create(createUserDto: CreateUserDto): Promise<Itoken> {
+    const userExist = await this.prisma.user.findFirst({
+      where: {
+        email: createUserDto.email
+      }
+    })
+
+    if (userExist) throw new ForbiddenException('Email telah tedaftar')
+    const passwordMatch = await argon.hash(createUserDto.password)
+
+    const user = await this.prisma.user.create({
+      data: {
+        username: createUserDto.username,
+        email: createUserDto.email,
+        password: passwordMatch
+      }
+    })
+
+    const token = await this.getToken(user.id, user.username)
+    return token
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async login(user: { password: string, email: string }): Promise<Itoken> {
+    const userExist = await this.prisma.user.findFirst({
+      where: {
+        email: user.email
+      }
+    })
+
+    if (!userExist) throw new ForbiddenException('Email yang anda berikan salah')
+    const passwordMatch = await argon.verify(userExist.password, user.password);
+
+    if (!passwordMatch) throw new ForbiddenException('Password yang anda berikan salah')
+
+    const token = await this.getToken(userExist.id, userExist.username)
+    this.updateToken(userExist.id, token.access_token)
+    return token
+
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async logout(user: any) {
+    return await this.prisma.user.update({
+      where: {
+        id: user.sub
+      },
+      data: {
+        refresh_token: null
+      }
+    })
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  changePassword(updateUserDto: any) {
+    return `This action updates a #${updateUserDto} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async getToken(userId: number, username: string): Promise<Itoken> {
+    const [access] = await Promise.all([
+      this.jwtService.signAsync({ // this is access token
+        sub: userId,
+        username,
+      }, {
+        secret: this.config.get('SCREET_ACCESS_TOKEN'),
+        expiresIn: '15m'
+      }
+      ),
+    ])
+    return {
+      access_token: access,
+    }
   }
+
+  async updateToken(id: number, token: string) {
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        refresh_token: token
+      }
+    })
+  }
+
 }

@@ -8,6 +8,7 @@ import {
   Post,
   Req,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
@@ -17,11 +18,14 @@ import { BarangService } from './barang.service';
 import { multerOptions } from './compareCategory';
 import { SearchAndPagination } from './dto';
 import { BarangDto } from './dto/create-barang.dto';
+import { AuthGuard } from '../user/strategy';
+
 
 @Controller('barang')
 export class BarangController {
   constructor(private readonly barangService: BarangService) { }
 
+  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(AnyFilesInterceptor(multerOptions))
   create(
@@ -43,6 +47,7 @@ export class BarangController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Post('/bulk/add')
   addBarangFromExcel() {
     const path = './file/sementara.xlsx';
@@ -55,26 +60,31 @@ export class BarangController {
     return this.barangService.parseExcelToJson(jsonData);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   findAll(@Body() selection: SearchAndPagination) {
     return this.barangService.findAll(selection);
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.barangService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() barang: BarangDto) {
     return this.barangService.update(+id, barang);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.barangService.remove(+id);
   }
 
+  @UseGuards(AuthGuard)
   @Post('bulk/delete')
   deleteBulk(@Body() barangId: { bulkId: Array<number> }) {
     return this.barangService.deleteBulk(barangId.bulkId);
