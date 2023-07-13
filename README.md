@@ -12,42 +12,33 @@
 
 Have some fitur Authentication/Authorization JWT :
 
-<input type="checkbox" checked>
-<label for="vehicle1" > Register </label><br>
-<input type="checkbox" checked>
-<label for="vehicle1"> Login </label><br>
-<input type="checkbox"checked >
-<label for="vehicle1" > Logout </label><br>
-<input type="checkbox" >
-<label for="vehicle1"> Forgot password </label><br>
+- [x] Register
+
+- [x] Login
+
+- [x] Logout
+
+- [] Forgot password
 
 <br/>
 
 Have some fitur tables :
 
-<input type="checkbox" checked>
-<label for="vehicle1"> [Manual] Create product</label><br>
+- [x] [Manual] Create product
 
-<input type="checkbox" checked>
-<label for="vehicle1"> [Manual] Put product</label><br>
+- [x] [Manual] Put product
 
-<input type="checkbox" checked>
-<label for="vehicle1"> [Manual] Delete product</label><br>
+- [x] [Manual] Delete product
 
-<input type="checkbox" checked>
-<label for="vehicle1"> Search by name, categorys, price, populer</label><br>
+- [x] Search by name, categorys, price, populer
 
-<input type="checkbox" checked>
-<label for="vehicle1"> Pagination</label><br>
+- [x] Pagination
 
-<input type="checkbox" checked>
-<label for="vehicle1"> [Bulk] Create products via excel</label><br>
+- [x] [Bulk] Create products via excel
 
-<input type="checkbox" checked >
-<label for="vehicle1"> [Bulk] Put products</label><br>
+- [x] [Bulk] Put products
 
-<input type="checkbox" checked>
-<label for="vehicle1"> [Bulk] Delete products</label><br>
+- [x] [Bulk] Delete products
 
 ## Running the app
 
@@ -56,4 +47,12 @@ Have some fitur tables :
 $ npm run start:dev
 ```
 
-[SPEC USER API](user.md)
+## ALL API MODUL
+
+[SPEC USER API](MD/user.md)
+
+[SPEC PRODUK API](MD/barang.md)
+
+[SPEC TRANSAKSI API](MD/transaksi.md)
+
+[SPEC CATEGORY API](MD/category.md)
