@@ -10,7 +10,7 @@ import { Itoken } from './dto/tokenType';
 export class UserService {
   constructor(private prisma: PrismaService, private jwtService: JwtService, private config: ConfigService) { }
 
-  async create(createUserDto: CreateUserDto): Promise<Itoken> {
+  async create(createUserDto: CreateUserDto): Promise<{ username: string, email: string }> {
     const userExist = await this.prisma.user.findFirst({
       where: {
         email: createUserDto.email
@@ -20,16 +20,20 @@ export class UserService {
     if (userExist) throw new ForbiddenException('Email telah tedaftar')
     const passwordMatch = await argon.hash(createUserDto.password)
 
-    const user = await this.prisma.user.create({
+    return await this.prisma.user.create({
       data: {
         username: createUserDto.username,
         email: createUserDto.email,
         password: passwordMatch
+      },
+      select: {
+        username: true,
+        email: true
       }
     })
 
-    const token = await this.getToken(user.id, user.username)
-    return token
+
+
   }
 
   async login(user: { password: string, email: string }): Promise<Itoken> {

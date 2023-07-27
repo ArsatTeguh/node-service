@@ -18,7 +18,7 @@ Have some fitur Authentication/Authorization JWT :
 
 - [x] Logout
 
-- [] Forgot password
+- [ ] Forgot password
 
 <br/>
 

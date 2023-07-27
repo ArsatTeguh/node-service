@@ -1,35 +1,27 @@
-# Products API specs
+# USER API
 
-## Get Products
+## Register user
 
-Endpoint : GET /api/barang
+Endpoint : POST /user/register
+
+Request Body :
+
+        {
+            username: "Admin"
+            email: "Admin@gmail.com",
+            password: "123admin",
+        },
 
 Response Body :
 
-    [
         {
-            id: 1,
-            thumbnail:http:localhost:8000/..
-            name: 'kulkas',
-            price: 500000,
-            variant: [{color:'merah',image:http:localhost:8000/..}],
-            stock:100,
-            kategory:'elektronik'
-        },
-        {
-            id: 2,
-            thumbnail:http:localhost:8000/..
-            name: 'mesin cuci',
-            price: 500000,
-            variant: [{color:'merah',image:http:localhost:8000/..}],
-            stock:100,
-            kategory:'elektronik'
+            "username" : "Admin",
+            "email"    : "Admin@gmail.com"
         }
-    ]
 
-## Get Byid Product
+## Login user
 
-Endpoint : GET /api/barang/1
+Endpoint : POST /user/login
 
 Response Body :
 
