@@ -20,10 +20,9 @@ import { SearchAndPagination } from './dto';
 import { BarangDto } from './dto/create-barang.dto';
 import { AuthGuard } from '../user/strategy';
 
-
 @Controller('barang')
 export class BarangController {
-  constructor(private readonly barangService: BarangService) { }
+  constructor(private readonly barangService: BarangService) {}
 
   @UseGuards(AuthGuard)
   @Post()
@@ -34,6 +33,7 @@ export class BarangController {
     @Req() req: any,
   ) {
     const updatedData = { ...data }; // Copy data asli ke variabel baru
+
     if (data.variants) {
       const variants = [];
       for (let i = 0; i < data.variants.length; i++) {

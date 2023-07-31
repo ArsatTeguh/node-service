@@ -1,0 +1,4 @@
+*.md
+/logs
+/node_modules
+/MD

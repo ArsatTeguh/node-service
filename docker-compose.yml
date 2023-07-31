@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  app:
+    container_name: nest-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: production
+      PORT: 3000
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    ports:
+      - 8080:3000
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+
