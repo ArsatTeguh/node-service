@@ -11,14 +11,15 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  username      String?  @db.VarChar(100)
-  email         String   @db.VarChar(20)
-  password      String   @db.VarChar(100)
-  image         String?  @db.VarChar(100)
-  refresh_token String?  @db.VarChar(200)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id            Int       @id @default(autoincrement())
+  username      String?   @db.VarChar(100)
+  email         String    @db.VarChar(20)
+  password      String    @db.VarChar(100)
+  image         String?   @db.VarChar(100)
+  refresh_token String?   @db.VarChar(200)
+  message       Message[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@map("user")
 }
@@ -57,4 +58,17 @@ model Transaksi {
   updatedAt DateTime @updatedAt
 
   @@map("transaksi")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  id_user   Int
+  message   String
+  users     String[]
+  sender    String   @db.VarChar(100)
+  user      User     @relation(fields: [id_user], references: [id])
+  read      Boolean
+  createdAt DateTime @default(now())
+
+  @@map("message")
 }

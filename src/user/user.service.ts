@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt/dist';
 import * as argon from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, IResponseUser } from './dto/create-user.dto';
 import { Itoken } from './dto/tokenType';
 
 @Injectable()
@@ -39,7 +39,10 @@ export class UserService {
     });
   }
 
-  async login(user: { password: string; email: string }): Promise<Itoken> {
+  async login(user: {
+    password: string;
+    email: string;
+  }): Promise<IResponseUser> {
     const userExist = await this.prisma.user.findFirst({
       where: {
         email: user.email,
@@ -55,7 +58,10 @@ export class UserService {
 
     const token = await this.getToken(userExist.id, userExist.username);
     this.updateToken(userExist.id, token.access_token);
-    return token;
+    delete userExist.password;
+    delete userExist.refresh_token;
+    delete userExist.email;
+    return userExist;
   }
 
   async logout(user: any) {
@@ -100,6 +106,24 @@ export class UserService {
       data: {
         refresh_token: token,
       },
+    });
+  }
+
+  async getAllUser() {
+    const data = await this.prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+      },
+    });
+
+    return data.map((e) => {
+      return {
+        id: e.id,
+        username: e.username,
+        newMessage: false,
+        online: false,
+      };
     });
   }
 }

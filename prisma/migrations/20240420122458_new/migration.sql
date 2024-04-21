@@ -5,7 +5,7 @@ CREATE TABLE "user" (
     "email" VARCHAR(20) NOT NULL,
     "password" VARCHAR(100) NOT NULL,
     "image" VARCHAR(100),
-    "refresh_token" VARCHAR(100),
+    "refresh_token" VARCHAR(200),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -49,5 +49,21 @@ CREATE TABLE "transaksi" (
     CONSTRAINT "transaksi_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "message" (
+    "id" SERIAL NOT NULL,
+    "id_user" INTEGER NOT NULL,
+    "message" TEXT NOT NULL,
+    "users" TEXT[],
+    "sender" VARCHAR(100) NOT NULL,
+    "read" BOOLEAN NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "message_pkey" PRIMARY KEY ("id")
+);
+
 -- AddForeignKey
 ALTER TABLE "transaksi" ADD CONSTRAINT "transaksi_id_barang_fkey" FOREIGN KEY ("id_barang") REFERENCES "barang"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "message" ADD CONSTRAINT "message_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

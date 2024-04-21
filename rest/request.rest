@@ -1,0 +1,48 @@
+GET http://localhost:3000/barang
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoia29uc3RhIiwiaWF0IjoxNjkwNzE3MjIyLCJleHAiOjE2OTA3MTgxMjJ9._X0uTAnUnxUlXKqrxYQflJHnbVTG06Tw00QbecIbaIk
+
+{
+    "name":"kayu",
+    "size":5,
+    "page":1
+}
+
+###
+GET http://localhost:3000/barang/12
+
+###  
+POST http://localhost:3000/barang
+content-type: application/json
+
+{
+    "name": "laptop",
+    "price": 200000,
+    "category":"a",
+    "stock":10,
+
+}
+###  
+POST http://localhost:3000/barang/bulk
+
+###
+PATCH  http://localhost:3000/barang/14
+content-type: application/json
+
+{
+    "name": "nestjs",
+    "price": 100,
+    "category":"module",
+     "stock":9
+}
+
+###
+DELETE http://localhost:3000/barang/18
+
+###
+POST  http://localhost:3000/barang/bulk/delete
+content-type: application/json
+
+{
+    "bulkId":[55,56,57,58,59,60]
+}

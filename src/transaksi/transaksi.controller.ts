@@ -12,7 +12,7 @@ export class TransaksiController {
     return this.transaksiService.create(+id, count);
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get()
   get() {
     return this.transaksiService.get();

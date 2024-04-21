@@ -1,0 +1,16 @@
+POST http://localhost:3000/message/add
+content-type: application/json
+
+{
+    "from": "3",
+    "to": "4",
+    "message": "hallo konsta apa kabar"
+}
+###  
+POST http://localhost:3000/message
+content-type: application/json
+
+{
+    "from":"4",
+    "to":"3"
+}
